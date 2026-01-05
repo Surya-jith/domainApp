@@ -1,0 +1,13 @@
+<%- include('layout', {
+  title: 'Dashboard',
+  heading: 'Dashboard',
+  subtitle: 'Access granted',
+  active: 'home',
+  role: role,
+  body: `
+    <div class="card">
+      <h3>Status</h3>
+      <p>You are securely logged in.</p>
+    </div>
+  `
+}) %>

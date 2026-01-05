@@ -1,0 +1,60 @@
+<%- include("layout", {
+  title: "Admin",
+  heading: "User Management",
+  subtitle: "Internal control panel",
+  active: "admin",
+  role: role,
+  body: `
+    <h3 class="card-title">Add User</h3>
+
+    <form class="add-user" method="POST" action="/admin/add">
+      <input name="name" placeholder="Name" required />
+      <input name="email" placeholder="Email" required />
+      <input name="password" type="password" placeholder="Password" required />
+      <button type="submit">Add</button>
+    </form>
+
+    <form method="GET" action="/admin">
+      <input
+        type="text"
+        name="search"
+        placeholder="Search users by name or email"
+        value="${search || ""}"
+      />
+      <button type="submit">Search</button>
+    </form>
+
+    <h3 class="card-title">Users</h3>
+
+    <table class="user-table">
+      <thead>
+        <tr>
+          <th>Email</th>
+          <th>Status</th>
+          <th class="right">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${users.map(u => `
+          <tr>
+            <td>${u.email}</td>
+            <td>
+              <span class="badge ${u.isBlocked ? "blocked" : "active"}">
+                ${u.isBlocked ? "Restricted" : "Active"}
+              </span>
+            </td>
+            <td class="right actions">
+              <a href="/admin/block/${u._id}">
+                ${u.isBlocked ? "Unrestrict" : "Restrict"}
+              </a>
+              <a href="/admin/delete/${u._id}" class="danger">
+                Delete
+              </a>
+            </td>
+          </tr>
+        `).join("")}
+      </tbody>
+    </table>
+  `
+}) %>
+
