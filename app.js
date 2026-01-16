@@ -1,16 +1,29 @@
+/* =====================
+   REQUIRE STATEMENTS
+===================== */
 require("dotenv").config();
 const express = require("express");
 const connectDB = require("./config/db");
 const session = require("./config/session");
 
+const authRoutes = require("./routes/authRoutes");
+const userRoutes = require("./routes/userRoutes");
+const adminRoutes = require("./routes/AdminRoutes");
+
+/* =====================
+   APP INITIALIZATION
+===================== */
 const app = express();
 connectDB();
 
+/* =====================
+   MIDDLEWARES
+===================== */
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 app.use(session);
 
-/* ✅ MOVE THIS HERE (BEFORE ROUTES) */
+/* Global locals middleware (before routes) */
 app.use((req, res, next) => {
   res.locals.userId = req.session.userId;
   res.locals.role = req.session.role;
@@ -19,10 +32,16 @@ app.use((req, res, next) => {
 
 app.set("view engine", "ejs");
 
-/* ROUTES */
-app.use(require("./routes/authRoutes"));
-app.use(require("./routes/userRoutes"));
-app.use("/admin", require("./routes/AdminRoutes"));
+/* =====================
+   ROUTES
+===================== */
+app.use(authRoutes);
+app.use(userRoutes);
+app.use("/admin", adminRoutes);
 
+/* =====================
+   EXPORT
+===================== */
 module.exports = app;
+
 
